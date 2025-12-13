@@ -50,7 +50,7 @@ export async function listUsers() {
   const db = await getDb()
   const users = db.collection<UserDoc>("carbonusers")
   // Only fetch regular users, not admin
-  const docs = await users.find({ role: "user" }, { projection: { password: 1, username: 1, role: 1, createdAt: 1, createdBy: 1 } }).sort({ createdAt: -1 }).toArray()
+  const docs = await users.find({ role: "user" }, { projection: { _id: 1, password: 1, username: 1, role: 1, createdAt: 1, createdBy: 1, paymentStatus: 1 } }).sort({ createdAt: -1 }).toArray()
   return docs
 }
 
