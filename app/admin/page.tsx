@@ -32,6 +32,7 @@ export default function AdminPortal() {
   const [showNewUserDialog, setShowNewUserDialog] = useState(false)
   const [copiedField, setCopiedField] = useState<string>("")
   const [editingPaymentId, setEditingPaymentId] = useState<string | null>(null)
+  const [pendingPaymentStatus, setPendingPaymentStatus] = useState<"paid" | "unpaid">("unpaid")
   const [updatingPayment, setUpdatingPayment] = useState(false)
 
   // Check if user is authenticated and is admin
@@ -110,14 +111,19 @@ export default function AdminPortal() {
     }
   }
 
-  const handlePaymentStatusChange = async (userId: string, newStatus: "paid" | "unpaid") => {
+  const handleEditPaymentStatus = (userId: string, currentStatus: "paid" | "unpaid") => {
+    setEditingPaymentId(userId)
+    setPendingPaymentStatus(currentStatus)
+  }
+
+  const handleSavePaymentStatus = async (userId: string) => {
     setUpdatingPayment(true)
     setError("")
     try {
       const res = await fetch(`/api/users/${userId}/payment`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: pendingPaymentStatus })
       })
       const data = await res.json()
       
@@ -319,14 +325,31 @@ export default function AdminPortal() {
                           {editingPaymentId === user._id ? (
                             <div className="flex items-center gap-2">
                               <select
-                                value={user.paymentStatus || 'unpaid'}
-                                onChange={(e) => handlePaymentStatusChange(user._id || '', e.target.value as 'paid' | 'unpaid')}
+                                value={pendingPaymentStatus}
+                                onChange={(e) => setPendingPaymentStatus(e.target.value as 'paid' | 'unpaid')}
                                 disabled={updatingPayment}
                                 className="px-2 py-1 border rounded text-sm"
                               >
                                 <option value="unpaid">Unpaid</option>
                                 <option value="paid">Paid</option>
                               </select>
+                              <Button
+                                size="sm"
+                                onClick={() => handleSavePaymentStatus(user._id || '')}
+                                disabled={updatingPayment}
+                                className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 h-7"
+                              >
+                                {updatingPayment ? 'Saving...' : 'Update'}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setEditingPaymentId(null)}
+                                disabled={updatingPayment}
+                                className="text-xs px-2 py-1 h-7"
+                              >
+                                Cancel
+                              </Button>
                             </div>
                           ) : (
                             <div className="flex items-center gap-2">
@@ -336,7 +359,7 @@ export default function AdminPortal() {
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                onClick={() => setEditingPaymentId(user._id || null)}
+                                onClick={() => handleEditPaymentStatus(user._id || '', user.paymentStatus || 'unpaid')}
                                 className="text-xs"
                               >
                                 Edit
