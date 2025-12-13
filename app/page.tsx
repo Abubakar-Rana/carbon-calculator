@@ -10,15 +10,13 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { AuthModal } from "@/components/ui/auth-modal"
+import { useAuth } from "@/lib/auth-context"
 
 
 export default function CarbonBNUVisualizer() {
   const router = useRouter()
+  const { user, logout } = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
-
-  const handleOpenCalculator = () => {
-    setShowAuthModal(true)
-  }
 
   const handleAuthenticated = (isAdmin: boolean) => {
     if (isAdmin) {
@@ -86,9 +84,28 @@ export default function CarbonBNUVisualizer() {
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Hero Section */}
-  <section className="relative min-h-screen flex items-center text-white overflow-hidden bg-gradient-to-r from-gray-900 via-green-800 to-gray-900 animate-gradient-x py-20">
-  {/* Floating CO₂ particles */}
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <section className="relative min-h-screen flex items-center text-white overflow-hidden bg-gradient-to-r from-gray-900 via-green-800 to-gray-900 animate-gradient-x py-20">
+      {/* Top Right: User Info & Logout */}
+      {user && (
+        <div className="absolute top-8 right-8 z-20 flex items-center gap-4">
+          <div className="text-right">
+            <p className="text-sm text-gray-300">Logged in as</p>
+            <p className="font-semibold">{user.username}</p>
+          </div>
+          <Button
+            onClick={() => {
+              logout()
+              setShowAuthModal(false)
+            }}
+            variant="outline"
+            className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+          >
+            Logout
+          </Button>
+        </div>
+      )}
+      {/* Floating CO₂ particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
     <span className="particle left-[10%] top-[20%]">CO₂</span>
     <span className="particle left-[70%] top-[50%]">CO₂</span>
     <span className="particle left-[30%] top-[75%]">CO₂</span>
@@ -109,12 +126,23 @@ export default function CarbonBNUVisualizer() {
           <Badge variant="outline" className="text-white border-white">Real-time Monitoring</Badge>
           <Badge variant="outline" className="text-white border-white">Scope 1, 2 & 3 Tracking</Badge>
         </div>
-        <Button 
-          onClick={handleOpenCalculator}
-          className="border-2 border-white bg-white text-black hero-button"
-        >
-          Open Emissions Calculator
-        </Button>
+        {user ? (
+          <div className="flex gap-4">
+            <Button 
+              onClick={() => router.push(user.role === "admin" ? "/admin" : "/page1")}
+              className="border-2 border-white bg-white text-black hero-button"
+            >
+              {user.role === "admin" ? "Go to Admin Panel" : "Open Emissions Calculator"}
+            </Button>
+          </div>
+        ) : (
+          <Button 
+            onClick={() => setShowAuthModal(true)}
+            className="border-2 border-white bg-white text-black hero-button"
+          >
+            Open Emissions Calculator
+          </Button>
+        )}
       </div>
 
       {/* Map */}

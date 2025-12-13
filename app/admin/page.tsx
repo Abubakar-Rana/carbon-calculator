@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { UserPlus, Trash2, Copy, CheckCircle2, Shield, Users, ArrowLeft, LogOut } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useAuth } from "@/lib/auth-context"
 
 type PortalUser = {
   _id?: string
@@ -22,12 +23,38 @@ type PortalUser = {
 
 export default function AdminPortal() {
   const router = useRouter()
+  const { user, logout, isLoading: authLoading } = useAuth()
   const [users, setUsers] = useState<PortalUser[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [newUser, setNewUser] = useState<PortalUser | null>(null)
   const [showNewUserDialog, setShowNewUserDialog] = useState(false)
   const [copiedField, setCopiedField] = useState<string>("")
+
+  // Check if user is authenticated and is admin
+  useEffect(() => {
+    if (!authLoading && (!user || user.role !== "admin")) {
+      router.push("/")
+    }
+  }, [user, authLoading, router])
+
+  // Show loading while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-center">Checking authentication...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // Redirect if not authenticated
+  if (!user || user.role !== "admin") {
+    return null
+  }
 
   const fetchUsers = async () => {
     setLoading(true)
@@ -60,6 +87,7 @@ export default function AdminPortal() {
       setNewUser(data.user)
       setShowNewUserDialog(true)
       fetchUsers()
+    logout()
     } catch (err: any) {
       setError(err?.message || "Unable to create user. Please check database connection.")
     }
