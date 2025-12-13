@@ -35,31 +35,7 @@ export default function AdminPortal() {
   const [pendingPaymentStatus, setPendingPaymentStatus] = useState<"paid" | "unpaid">("unpaid")
   const [updatingPayment, setUpdatingPayment] = useState(false)
 
-  // Check if user is authenticated and is admin
-  useEffect(() => {
-    if (!authLoading && (!user || user.role !== "admin")) {
-      router.replace("/")
-    }
-  }, [user, authLoading, router])
-
-  // Show loading while checking auth
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-center">Checking authentication...</p>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
-  // Redirect if not authenticated
-  if (!user || user.role !== "admin") {
-    return null
-  }
-
+  // Define all functions before hooks
   const fetchUsers = async () => {
     setLoading(true)
     setError("")
@@ -76,10 +52,6 @@ export default function AdminPortal() {
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    fetchUsers()
-  }, [])
 
   const handleCreateUser = async () => {
     setError("")
@@ -151,6 +123,37 @@ export default function AdminPortal() {
   const handleLogout = () => {
     logout()
     router.replace("/")
+  }
+
+  // All useEffect hooks before any conditional returns
+  useEffect(() => {
+    if (!authLoading && (!user || user.role !== "admin")) {
+      router.replace("/")
+    }
+  }, [user, authLoading, router])
+
+  useEffect(() => {
+    if (user && user.role === "admin") {
+      fetchUsers()
+    }
+  }, [user])
+
+  // Show loading while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-center">Checking authentication...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // Redirect if not authenticated
+  if (!user || user.role !== "admin") {
+    return null
   }
 
   return (
