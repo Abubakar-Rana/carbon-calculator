@@ -2347,7 +2347,7 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, children }) => (
 // ---------- Main Component ----------
 export default function CarbonCalculator() {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   
   // --- UI States ---
   const [showSystemTour, setShowSystemTour] = useState(false);
@@ -2391,6 +2391,26 @@ export default function CarbonCalculator() {
     { scope: "Scope 3", value: 0 },
   ]);
 
+  // Authentication check - redirect if not logged in
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/");
+    }
+  }, [user, isLoading, router]);
+
+  // Show loading state while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
+
+  // Redirect if not authenticated
+  if (!user) {
+    return null;
+  }
 
   useEffect(() => setIsVisible(true), []);
 

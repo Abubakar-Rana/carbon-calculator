@@ -65,11 +65,11 @@ export default function SystemTour({ isOpen, onClose }: SystemTourProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <Card className="w-full max-w-md">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+      <Card className="w-full max-w-md bg-white shadow-2xl">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
           <div>
-            <CardTitle className="text-2xl">{step.title}</CardTitle>
-            <CardDescription className="mt-1">
+            <CardTitle className="text-2xl text-gray-900">{step.title}</CardTitle>
+            <CardDescription className="mt-1 text-gray-600">
               Step {currentStep + 1} of {tourSteps.length}
             </CardDescription>
           </div>
@@ -83,7 +83,7 @@ export default function SystemTour({ isOpen, onClose }: SystemTourProps) {
 
         <CardContent className="space-y-4">
           <div className="flex justify-center text-6xl mb-4">{step.icon}</div>
-          <p className="text-gray-700 text-center leading-relaxed">{step.description}</p>
+          <p className="text-gray-800 text-center leading-relaxed font-medium">{step.description}</p>
 
           {/* Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -126,7 +126,7 @@ export default function SystemTour({ isOpen, onClose }: SystemTourProps) {
           {/* Skip Button */}
           <button
             onClick={onClose}
-            className="w-full text-sm text-gray-500 hover:text-gray-700 py-2 transition-colors"
+            className="w-full text-sm text-gray-600 hover:text-gray-800 py-2 transition-colors font-medium"
           >
             Skip Tour
           </button>
