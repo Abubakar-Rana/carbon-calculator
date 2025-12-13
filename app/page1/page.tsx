@@ -2350,6 +2350,16 @@ export default function CarbonCalculator() {
   const router = useRouter();
   const { user, logout, isLoading } = useAuth();
   
+  // Define constants that are needed for types
+  const VEHICLE_EF_KG_PER_KM = {
+    "Small Petrol Car": 0.192,
+    "Large Petrol Car": 0.282,
+    "Small Diesel Car": 0.171,
+    "Large Diesel Car": 0.21,
+    Motorcycle: 0.103,
+    "Electric Car": 0.05,
+  };
+  
   // --- UI States ---
   const [showSystemTour, setShowSystemTour] = useState(false);
   const [showPaymentBlocked, setShowPaymentBlocked] = useState(false);
@@ -2393,6 +2403,9 @@ export default function CarbonCalculator() {
     { scope: "Scope 3", value: 0 },
   ]);
 
+  // useEffect must come AFTER all useState hooks
+  useEffect(() => setIsVisible(true), []);
+
   // Authentication check - redirect if not logged in
   useEffect(() => {
     if (!isLoading && !user) {
@@ -2419,22 +2432,11 @@ export default function CarbonCalculator() {
     return null;
   }
 
-  useEffect(() => setIsVisible(true), []);
-
   // Emission factors
   const EF_DIESEL_KG_PER_L = 2.68;
   const EF_NATURAL_GAS_KG_PER_M3 = 1.9;
   const EF_LPG_KG_PER_KG = 3.0;
   const EF_ELECTRICITY_KG_PER_KWH = 0.615;
-
-  const VEHICLE_EF_KG_PER_KM = {
-    "Small Petrol Car": 0.192,
-    "Large Petrol Car": 0.282,
-    "Small Diesel Car": 0.171,
-    "Large Diesel Car": 0.21,
-    Motorcycle: 0.103,
-    "Electric Car": 0.05,
-  };
 
   const EF_WASTE = {
     food: 1.305,

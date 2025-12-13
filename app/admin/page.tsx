@@ -135,8 +135,6 @@ export default function AdminPortal() {
         )
       )
       setEditingPaymentId(null)
-      // Also fetch to ensure sync with database
-      fetchUsers()
     } catch (err: any) {
       setError(err?.message || "Unable to update payment status. Please check database connection.")
     } finally {
