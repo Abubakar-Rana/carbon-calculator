@@ -19,6 +19,9 @@ yarn-error.log*
 # env files
 .env*
 
+# test files
+test-db-connection.js
+
 # vercel
 .vercel
 

@@ -7,11 +7,27 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { AuthModal } from "@/components/ui/auth-modal"
 
 
 export default function CarbonBNUVisualizer() {
+  const router = useRouter()
+  const [showAuthModal, setShowAuthModal] = useState(false)
+
+  const handleOpenCalculator = () => {
+    setShowAuthModal(true)
+  }
+
+  const handleAuthenticated = (isAdmin: boolean) => {
+    if (isAdmin) {
+      router.push("/admin")
+    } else {
+      router.push("/page1")
+    }
+  }
+
   // Scope 2 Data
   const scope2Data =  [
     { month: "Jan 2025", gridunitsConsumed: 80000, gridEmission: 49200 , solarProduction: 58632, savedEmissions: 36058.68 , netEmissions: 13141.32 },
@@ -93,11 +109,12 @@ export default function CarbonBNUVisualizer() {
           <Badge variant="outline" className="text-white border-white">Real-time Monitoring</Badge>
           <Badge variant="outline" className="text-white border-white">Scope 1, 2 & 3 Tracking</Badge>
         </div>
-        <Link href="/page1">
-          <Button className="border-2 border-white bg-white text-black hero-button">
-            Open Emissions Calculator
-          </Button>
-        </Link>
+        <Button 
+          onClick={handleOpenCalculator}
+          className="border-2 border-white bg-white text-black hero-button"
+        >
+          Open Emissions Calculator
+        </Button>
       </div>
 
       {/* Map */}
@@ -453,6 +470,13 @@ export default function CarbonBNUVisualizer() {
           <p className="text-sm text-gray-500">Data updated regularly • Scope 1, 2 & 3 emissions tracking</p>
         </div>
       </footer>
+
+      {/* Authentication Modal */}
+      <AuthModal 
+        open={showAuthModal} 
+        onOpenChange={setShowAuthModal}
+        onAuthenticated={handleAuthenticated}
+      />
     </div>
   )
 }
