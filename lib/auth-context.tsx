@@ -6,6 +6,7 @@ type AuthUser = {
   role: 'admin' | 'user'
   username: string
   isFirstLogin?: boolean
+  paymentStatus?: 'paid' | 'unpaid'
 }
 
 type AuthContextType = {
@@ -88,7 +89,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const authUser = { 
       role: data.role as 'admin' | 'user', 
       username,
-      isFirstLogin: data.isFirstLogin || false
+      isFirstLogin: data.isFirstLogin || false,
+      paymentStatus: data.paymentStatus || 'unpaid'
     }
     setUser(authUser)
     localStorage.setItem('carbonAuth', JSON.stringify(authUser))

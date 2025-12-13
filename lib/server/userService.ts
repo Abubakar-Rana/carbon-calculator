@@ -9,6 +9,7 @@ export type UserDoc = {
   createdAt: string
   createdBy: string
   hasViewedTour?: boolean
+  paymentStatus?: "paid" | "unpaid"
 }
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "carbonadmin"
@@ -73,7 +74,8 @@ export async function createUser(createdBy = "admin") {
     password,
     role: "user",
     createdAt: now,
-    createdBy
+    createdBy,
+    paymentStatus: "unpaid"
   }
   const result = await users.insertOne(doc)
   return { ...doc, _id: result.insertedId }
@@ -86,10 +88,17 @@ export async function deleteUserById(id: string) {
   await users.deleteOne({ _id })
 }
 
+export async function updatePaymentStatus(id: string, status: "paid" | "unpaid") {
+  const db = await getDb()
+  const users = db.collection<UserDoc>("carbonusers")
+  const _id = new ObjectId(id)
+  await users.updateOne({ _id }, { $set: { paymentStatus: status } })
+}
+
 export async function validateCredentials(username: string, password: string) {
   // First check if it's admin login from env variables
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-    return { username: ADMIN_USERNAME, role: "admin" as const, isFirstLogin: false }
+    return { username: ADMIN_USERNAME, role: "admin" as const, isFirstLogin: false, paymentStatus: "paid" as const }
   }
   
   // Otherwise check regular users from MongoDB
@@ -105,5 +114,10 @@ export async function validateCredentials(username: string, password: string) {
     await users.updateOne({ _id: user._id }, { $set: { hasViewedTour: true } })
   }
   
-  return { username: user.username, role: user.role, isFirstLogin }
+  return { 
+    username: user.username, 
+    role: user.role, 
+    isFirstLogin,
+    paymentStatus: user.paymentStatus || "unpaid"
+  }
 }

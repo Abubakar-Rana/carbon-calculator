@@ -19,6 +19,7 @@ type PortalUser = {
   role: "admin" | "user"
   createdAt: string
   createdBy: string
+  paymentStatus?: "paid" | "unpaid"
 }
 
 export default function AdminPortal() {
@@ -30,6 +31,8 @@ export default function AdminPortal() {
   const [newUser, setNewUser] = useState<PortalUser | null>(null)
   const [showNewUserDialog, setShowNewUserDialog] = useState(false)
   const [copiedField, setCopiedField] = useState<string>("")
+  const [editingPaymentId, setEditingPaymentId] = useState<string | null>(null)
+  const [updatingPayment, setUpdatingPayment] = useState(false)
 
   // Check if user is authenticated and is admin
   useEffect(() => {
@@ -104,6 +107,27 @@ export default function AdminPortal() {
       fetchUsers()
     } catch (err: any) {
       setError(err?.message || "Unable to delete user. Please check database connection.")
+    }
+  }
+
+  const handlePaymentStatusChange = async (userId: string, newStatus: "paid" | "unpaid") => {
+    setUpdatingPayment(true)
+    setError("")
+    try {
+      const res = await fetch(`/api/users/${userId}/payment`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus })
+      })
+      const data = await res.json()
+      
+      if (!res.ok) throw new Error(data?.error || "Failed to update payment status")
+      setEditingPaymentId(null)
+      fetchUsers()
+    } catch (err: any) {
+      setError(err?.message || "Unable to update payment status. Please check database connection.")
+    } finally {
+      setUpdatingPayment(false)
     }
   }
 
@@ -246,6 +270,7 @@ export default function AdminPortal() {
                     <TableRow className="bg-gray-50">
                       <TableHead className="font-semibold">Username</TableHead>
                       <TableHead className="font-semibold">Password</TableHead>
+                      <TableHead className="font-semibold">Payment Status</TableHead>
                       <TableHead className="font-semibold">Created At</TableHead>
                       <TableHead className="font-semibold">Created By</TableHead>
                       <TableHead className="text-right font-semibold">Actions</TableHead>
@@ -289,6 +314,35 @@ export default function AdminPortal() {
                               )}
                             </Button>
                           </div>
+                        </TableCell>
+                        <TableCell>
+                          {editingPaymentId === user._id ? (
+                            <div className="flex items-center gap-2">
+                              <select
+                                value={user.paymentStatus || 'unpaid'}
+                                onChange={(e) => handlePaymentStatusChange(user._id || '', e.target.value as 'paid' | 'unpaid')}
+                                disabled={updatingPayment}
+                                className="px-2 py-1 border rounded text-sm"
+                              >
+                                <option value="unpaid">Unpaid</option>
+                                <option value="paid">Paid</option>
+                              </select>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <Badge variant={user.paymentStatus === 'paid' ? 'default' : 'destructive'}>
+                                {user.paymentStatus === 'paid' ? '✓ Paid' : '✗ Unpaid'}
+                              </Badge>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => setEditingPaymentId(user._id || null)}
+                                className="text-xs"
+                              >
+                                Edit
+                              </Button>
+                            </div>
+                          )}
                         </TableCell>
                         <TableCell>
                           {new Date(user.createdAt).toLocaleDateString()}

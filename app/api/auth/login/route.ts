@@ -16,7 +16,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ 
       success: true, 
       role: user.role,
-      isFirstLogin: user.isFirstLogin || false 
+      isFirstLogin: user.isFirstLogin || false,
+      paymentStatus: user.paymentStatus || 'unpaid'
     })
   } catch (err) {
     console.error("Login error", err)

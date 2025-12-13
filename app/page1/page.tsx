@@ -2310,6 +2310,7 @@ import Loader from "@/components/ui/Loader";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import SystemTour from "@/components/SystemTour";
+import PaymentBlockedModal from "@/components/PaymentBlockedModal";
 
 
 // ---------- Type Definitions ----------
@@ -2351,6 +2352,7 @@ export default function CarbonCalculator() {
   
   // --- UI States ---
   const [showSystemTour, setShowSystemTour] = useState(false);
+  const [showPaymentBlocked, setShowPaymentBlocked] = useState(false);
   
   // --- Input States ---
   const [dieselLiters, setDieselLiters] = useState(0);
@@ -2394,7 +2396,12 @@ export default function CarbonCalculator() {
   // Authentication check - redirect if not logged in
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push("/");
+      router.replace("/");
+      return;
+    }
+    // Check payment status
+    if (user && user.paymentStatus === 'unpaid') {
+      setShowPaymentBlocked(true);
     }
   }, [user, isLoading, router]);
 
@@ -3153,6 +3160,9 @@ export default function CarbonCalculator() {
 
       {/* System Tour Modal */}
       <SystemTour isOpen={showSystemTour} onClose={() => setShowSystemTour(false)} />
+
+      {/* Payment Blocked Modal */}
+      <PaymentBlockedModal isOpen={showPaymentBlocked} />
 
     </div>
   );
