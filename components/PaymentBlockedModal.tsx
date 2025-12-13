@@ -18,7 +18,7 @@ export default function PaymentBlockedModal({ isOpen }: PaymentBlockedModalProps
 
   const handleLogout = () => {
     logout()
-    router.push('/')
+    router.replace('/')
   }
 
   return (

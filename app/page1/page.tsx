@@ -2509,7 +2509,7 @@ export default function CarbonCalculator() {
         {/* Navigation Buttons */}
         <div className="absolute top-6 left-6 right-6 z-20 flex justify-between items-center">
           <Button
-            onClick={() => router.push('/')}
+            onClick={() => router.replace('/')}
             variant="outline"
             className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2"
           >
@@ -2531,7 +2531,7 @@ export default function CarbonCalculator() {
               <Button
                 onClick={() => {
                   logout()
-                  router.push('/')
+                  router.replace('/')
                 }}
                 variant="outline"
                 className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2"
