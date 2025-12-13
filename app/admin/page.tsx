@@ -38,7 +38,7 @@ export default function AdminPortal() {
   // Check if user is authenticated and is admin
   useEffect(() => {
     if (!authLoading && (!user || user.role !== "admin")) {
-      router.push("/")
+      router.replace("/")
     }
   }, [user, authLoading, router])
 
@@ -127,7 +127,15 @@ export default function AdminPortal() {
       const data = await res.json()
       
       if (!res.ok) throw new Error(data?.error || "Failed to update payment status")
+      
+      // Update local state immediately for instant UI feedback
+      setUsers(prevUsers => 
+        prevUsers.map(u => 
+          u._id === userId ? { ...u, paymentStatus: pendingPaymentStatus } : u
+        )
+      )
       setEditingPaymentId(null)
+      // Also fetch to ensure sync with database
       fetchUsers()
     } catch (err: any) {
       setError(err?.message || "Unable to update payment status. Please check database connection.")
@@ -143,7 +151,8 @@ export default function AdminPortal() {
   }
 
   const handleLogout = () => {
-    router.push("/")
+    logout()
+    router.replace("/")
   }
 
   return (
@@ -161,7 +170,7 @@ export default function AdminPortal() {
             </div>
             <div className="flex gap-2">
               <Button
-                onClick={() => router.push("/")}
+                onClick={() => router.replace("/")}
                 variant="outline"
                 className="bg-white/10 border-white/20 text-white hover:bg-white/20"
               >
