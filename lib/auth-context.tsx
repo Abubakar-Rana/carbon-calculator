@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react'
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react'
 
 type AuthUser = {
   role: 'admin' | 'user'
@@ -27,19 +27,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [sessionExpired, setSessionExpired] = useState(false)
-  let timeoutId: NodeJS.Timeout | null = null
+  const timeoutIdRef = React.useRef<NodeJS.Timeout | null>(null)
+
+  const logout = useCallback(() => {
+    setUser(null)
+    localStorage.removeItem('carbonAuth')
+    if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current)
+  }, [])
 
   // Session timeout management
   const resetSessionTimer = useCallback(() => {
-    if (timeoutId) clearTimeout(timeoutId)
+    if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current)
     
     if (user) {
-      timeoutId = setTimeout(() => {
+      timeoutIdRef.current = setTimeout(() => {
         logout()
         setSessionExpired(true)
       }, SESSION_TIMEOUT)
     }
-  }, [user])
+  }, [user, logout])
 
   // Track user activity
   useEffect(() => {
@@ -56,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       events.forEach(event => document.removeEventListener(event, handleActivity))
-      if (timeoutId) clearTimeout(timeoutId)
+      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current)
     }
   }, [user, resetSessionTimer])
 
@@ -95,12 +101,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(authUser)
     localStorage.setItem('carbonAuth', JSON.stringify(authUser))
     setSessionExpired(false)
-  }
-
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem('carbonAuth')
-    if (timeoutId) clearTimeout(timeoutId)
   }
 
   return (

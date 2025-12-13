@@ -469,10 +469,19 @@ export default function AdminPortal() {
                     </Button>
                   </div>
                 </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Payment Status</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge variant={newUser.paymentStatus === 'paid' ? 'default' : 'destructive'} className="text-sm">
+                      {newUser.paymentStatus === 'paid' ? '✓ Paid' : '✗ Unpaid (Default)'}
+                    </Badge>
+                    <span className="text-xs text-gray-500">Can be updated in user table</span>
+                  </div>
+                </div>
               </div>
               <Alert>
                 <AlertDescription className="text-sm">
-                  Make sure to copy and save these credentials before closing this dialog.
+                  Make sure to copy and save these credentials before closing this dialog. Update payment status in the user management table above.
                 </AlertDescription>
               </Alert>
               <Button
