@@ -2302,11 +2302,13 @@ import { Badge } from "@/components/ui/badge";
 import CalculateButton from '@/components/ui/CalculateButton';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 // Removed Loader2
-import { Leaf, Zap, Trash2, Factory, Car, Wind, TrendingDown, Calculator, Sun } from "lucide-react";
+import { Leaf, Zap, Trash2, Factory, Car, Wind, TrendingDown, Calculator, Sun, ArrowLeft, LogOut } from "lucide-react";
 import { exportCarbonReport } from "@/lib/reportgenerator";
 // --- NEW: Import your custom loader ---
 // (Adjust this path if you saved your Loader.tsx file elsewhere)
 import Loader from "@/components/ui/Loader";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
 
 
 // ---------- Type Definitions ----------
@@ -2343,6 +2345,9 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, children }) => (
 
 // ---------- Main Component ----------
 export default function CarbonCalculator() {
+  const router = useRouter();
+  const { user, logout } = useAuth();
+  
   // --- Input States ---
   const [dieselLiters, setDieselLiters] = useState(0);
   const [gasM3, setGasM3] = useState(0);
@@ -2468,6 +2473,34 @@ export default function CarbonCalculator() {
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="absolute top-6 left-6 right-6 z-20 flex justify-between items-center">
+          <Button
+            onClick={() => router.push('/')}
+            variant="outline"
+            className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Button>
+          {user && (
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-white/80">{user.username}</div>
+              <Button
+                onClick={() => {
+                  logout()
+                  router.push('/')
+                }}
+                variant="outline"
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className={`container mx-auto px-6 relative z-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>

@@ -13,7 +13,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
 
-    return NextResponse.json({ success: true, role: user.role })
+    return NextResponse.json({ 
+      success: true, 
+      role: user.role,
+      isFirstLogin: user.isFirstLogin || false 
+    })
   } catch (err) {
     console.error("Login error", err)
     return NextResponse.json({ error: "Database connection failed. Please check your network." }, { status: 500 })

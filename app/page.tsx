@@ -11,12 +11,22 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { AuthModal } from "@/components/ui/auth-modal"
 import { useAuth } from "@/lib/auth-context"
+import SystemTour from "@/components/SystemTour"
+import SessionTimeoutModal from "@/components/SessionTimeoutModal"
 
 
 export default function CarbonBNUVisualizer() {
   const router = useRouter()
-  const { user, logout } = useAuth()
+  const { user, logout, sessionExpired, setSessionExpired } = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showSystemTour, setShowSystemTour] = useState(false)
+
+  // Show system tour on first login
+  useEffect(() => {
+    if (user && user.isFirstLogin) {
+      setShowSystemTour(true)
+    }
+  }, [user])
 
   const handleAuthenticated = (isAdmin: boolean) => {
     if (isAdmin) {
@@ -24,6 +34,11 @@ export default function CarbonBNUVisualizer() {
     } else {
       router.push("/page1")
     }
+  }
+
+  const handleLoginAgain = () => {
+    setSessionExpired(false)
+    setShowAuthModal(true)
   }
 
   // Scope 2 Data
@@ -505,6 +520,8 @@ export default function CarbonBNUVisualizer() {
         onOpenChange={setShowAuthModal}
         onAuthenticated={handleAuthenticated}
       />
+      <SystemTour isOpen={showSystemTour} onClose={() => setShowSystemTour(false)} />
+      <SessionTimeoutModal isOpen={sessionExpired} onLogin={handleLoginAgain} />
     </div>
   )
 }

@@ -8,6 +8,7 @@ export type UserDoc = {
   role: "admin" | "user"
   createdAt: string
   createdBy: string
+  hasViewedTour?: boolean
 }
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "carbonadmin"
@@ -88,7 +89,7 @@ export async function deleteUserById(id: string) {
 export async function validateCredentials(username: string, password: string) {
   // First check if it's admin login from env variables
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-    return { username: ADMIN_USERNAME, role: "admin" as const }
+    return { username: ADMIN_USERNAME, role: "admin" as const, isFirstLogin: false }
   }
   
   // Otherwise check regular users from MongoDB
@@ -96,5 +97,13 @@ export async function validateCredentials(username: string, password: string) {
   const users = db.collection<UserDoc>("carbonusers")
   const user = await users.findOne({ username, password, role: "user" })
   if (!user) return null
-  return { username: user.username, role: user.role }
+  
+  const isFirstLogin = !user.hasViewedTour
+  
+  // Mark tour as viewed if this is first login
+  if (isFirstLogin) {
+    await users.updateOne({ _id: user._id }, { $set: { hasViewedTour: true } })
+  }
+  
+  return { username: user.username, role: user.role, isFirstLogin }
 }
