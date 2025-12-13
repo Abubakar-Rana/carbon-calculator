@@ -91,7 +91,6 @@ export default function AdminPortal() {
       setNewUser(data.user)
       setShowNewUserDialog(true)
       fetchUsers()
-    logout()
     } catch (err: any) {
       setError(err?.message || "Unable to create user. Please check database connection.")
     }
