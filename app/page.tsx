@@ -45,55 +45,133 @@ export default function CarbonBNUVisualizer() {
   const scope2Data =  [
     { month: "Jan 2025", gridunitsConsumed: 80000, gridEmission: 49200 , solarProduction: 58632, savedEmissions: 36058.68 , netEmissions: 13141.32 },
     { month: "Feb 2025", gridunitsConsumed: 20000, gridEmission: 12300 , solarProduction: 46428, savedEmissions: 28553.22 , netEmissions: -16253.22 },
-    { month: "Mar 2025", gridunitsConsumed: 4000,  gridEmission: 2460,   solarProduction: 52000, savedEmissions: 31980    , netEmissions: -29340 },
+    { month: "Mar 2025", gridunitsConsumed: 4000,  gridEmission: 2460,   solarProduction: 52000, savedEmissions: 31980    , netEmissions: -29520 },
     { month: "Apr 2025", gridunitsConsumed: 76000, gridEmission: 46740,  solarProduction: 111099,savedEmissions: 68325.885, netEmissions: -21585.885 },
     { month: "May 2025", gridunitsConsumed: 116000, gridEmission: 71340, solarProduction: 103934,savedEmissions: 63919.41 , netEmissions: 7420.59 },
     { month: "Jun 2025", gridunitsConsumed: 148000, gridEmission: 91020, solarProduction: 91186, savedEmissions: 56079.39 , netEmissions: 34940.61 },
+    { month: "Jul 2025", gridunitsConsumed: 64000, gridEmission: 39360,  solarProduction: 85526, savedEmissions: 52598.49 , netEmissions: -13238.49 },
+    { month: "Aug 2025", gridunitsConsumed: 56000, gridEmission: 34440,  solarProduction: 82021, savedEmissions: 50442.915, netEmissions: -16002.915 },
+    { month: "Sep 2025", gridunitsConsumed: 92000, gridEmission: 56580,  solarProduction: 93658, savedEmissions: 57599.67 , netEmissions: -1019.67 },
+    { month: "Oct 2025", gridunitsConsumed: 76000, gridEmission: 46740,  solarProduction: 82300, savedEmissions: 50614.5  , netEmissions: -3874.5 },
+    { month: "Nov 2025", gridunitsConsumed: 0,     gridEmission: 0,      solarProduction: 64066, savedEmissions: 39400.59 , netEmissions: -39400.59 },
   ]
   // Scope 1 Data
   const scope1Data = [
-    { month: "Jan 2025", dieselConsumption: 23267.72, emissionsinKg: 11095.2 },
-    { month: "Feb 2025", dieselConsumption: 11032.63, emissionsinKg: 18191.84 },
-    { month: "Mar 2025", dieselConsumption: 11100.8,  emissionsinKg: 10588.68 },
-    { month: "Apr 2025", dieselConsumption: 21076.71, emissionsinKg: 8956.56 },
-    { month: "May 2025", dieselConsumption: 12642.14, emissionsinKg: 7589.76 },
-    { month: "Jun 2025", dieselConsumption: 12642.14, emissionsinKg: 11647.28 }, 
+    { month: "Jan 2025", dieselConsumption: 4140, emissionsinKg: 11095.2 },
+    { month: "Feb 2025", dieselConsumption: 6788, emissionsinKg: 18191.84 },
+    { month: "Mar 2025", dieselConsumption: 3951, emissionsinKg: 10588.68 },
+    { month: "Apr 2025", dieselConsumption: 3342, emissionsinKg: 8956.56 },
+    { month: "May 2025", dieselConsumption: 2832, emissionsinKg: 7589.76 },
+    { month: "Jun 2025", dieselConsumption: 4346, emissionsinKg: 11647.28 },
+    { month: "Jul 2025", dieselConsumption: 4037, emissionsinKg: 10818.96 },
+    { month: "Aug 2025", dieselConsumption: 3434, emissionsinKg: 9203.12 },
+    { month: "Sep 2025", dieselConsumption: 6681, emissionsinKg: 17905.08 },
+    { month: "Oct 2025", dieselConsumption: 5188, emissionsinKg: 13903.84 },
+    { month: "Nov 2025", dieselConsumption: 4573, emissionsinKg: 12255.64 },
   ]
 
   // Scope 3 Data
   const scope3Data = [
   {
     month: "May 2025",
-    bottles: 80.1,
-    glass: 50.6,
-    foodWaste: 2067.3,
+    bottles: 80,
+    glass: 41.8,
+    foodWaste: 2145,
     plastic: 13.2,
-    cartons: 106,
-    emissionsBottles: 200.25,
-    emissionsGlass: 72.7122,
-    emissionsFoodWaste: 2697.82,
+    cartons: 114.2,
+    emissionsBottles: 200,
+    emissionsGlass: 60.0666,
+    emissionsFoodWaste: 2799.225,
     emissionsPlastic: 38.016,
-    emissionsCartons: 99.64,
+    emissionsCartons: 107.348,
   },
   {
     month: "Jun 2025",
     bottles: 119.8,
-    glass: 177.85,
+    glass: 177.8,
     foodWaste: 1223,
-    plastic: 69,
+    plastic: 0,
     cartons: 276.6,
     emissionsBottles: 299.5,
-    emissionsGlass: 255.57,
+    emissionsGlass: 255.4986,
     emissionsFoodWaste: 1596.015,
-    emissionsPlastic: 198.72,
+    emissionsPlastic: 0,
     emissionsCartons: 260.004,
+  },
+  {
+    month: "Jul 2025",
+    bottles: 60.2,
+    glass: 46.9,
+    foodWaste: 1484,
+    plastic: 52.3,
+    cartons: 116.6,
+    emissionsBottles: 150.5,
+    emissionsGlass: 67.3953,
+    emissionsFoodWaste: 1936.62,
+    emissionsPlastic: 150.624,
+    emissionsCartons: 109.604,
+  },
+  {
+    month: "Aug 2025",
+    bottles: 40.8,
+    glass: 40.5,
+    foodWaste: 1107,
+    plastic: 36.9,
+    cartons: 23.1,
+    emissionsBottles: 102,
+    emissionsGlass: 58.1985,
+    emissionsFoodWaste: 1444.635,
+    emissionsPlastic: 106.272,
+    emissionsCartons: 21.714,
+  },
+  {
+    month: "Sep 2025",
+    bottles: 45.8,
+    glass: 35.8,
+    foodWaste: 1438,
+    plastic: 32.8,
+    cartons: 30.5,
+    emissionsBottles: 114.5,
+    emissionsGlass: 51.4446,
+    emissionsFoodWaste: 1876.59,
+    emissionsPlastic: 94.464,
+    emissionsCartons: 28.67,
+  },
+  {
+    month: "Oct 2025",
+    bottles: 69.1,
+    glass: 77.6,
+    foodWaste: 510,
+    plastic: 35.7,
+    cartons: 128.8,
+    emissionsBottles: 172.75,
+    emissionsGlass: 111.5112,
+    emissionsFoodWaste: 665.55,
+    emissionsPlastic: 102.816,
+    emissionsCartons: 121.072,
+  },
+  {
+    month: "Nov 2025",
+    bottles: 32.2,
+    glass: 30.4,
+    foodWaste: 32.8,
+    plastic: 23.5,
+    cartons: 32.8,
+    emissionsBottles: 80.5,
+    emissionsGlass: 43.6848,
+    emissionsFoodWaste: 42.804,
+    emissionsPlastic: 67.68,
+    emissionsCartons: 30.832,
   }
 ];
 
   // Calculate totals
   const totalScope2NetEmissions = scope2Data.reduce((sum, item) => sum + item.gridEmission, 0)
   const totalScope1Emissions = scope1Data.reduce((sum, item) => sum + item.emissionsinKg, 0)
-  const totalScope3Emissions = 5718.25
+  const totalScope3Emissions = scope3Data.reduce((sum, item) => 
+    sum + item.emissionsBottles + item.emissionsGlass + item.emissionsFoodWaste + item.emissionsPlastic + item.emissionsCartons, 0)
+  
+  // Note: December 2025 data will be added at the end of the month
 
 
   return (
@@ -161,17 +239,17 @@ export default function CarbonBNUVisualizer() {
       </div>
 
       {/* Map */}
-      <div className="flex justify-center">
-        <div className="rounded-xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-500">
+      <div className="flex justify-end pr-8">
+        <div className="rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-500 w-full max-w-5xl">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3974.580035194876!2d74.21348101172664!3d31.364969974178265!2m3!1f0!2f3!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391855549698f6f7%3A0x4ffb44644f967144!2sBeaconhouse%20National%20University%20(BNU)!5e1!3m2!1sen!2s!4v1748977707563!5m2!1sen!2s"
-            width="500"
-            height="350"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3974.580035194876!2d74.21348101172664!3d31.364969974178265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391855549698f6f7%3A0x4ffb44644f967144!2sBeaconhouse%20National%20University%20(BNU)!5e1!3m2!1sen!2s!4v1748977707563!5m2!1sen!2s"
+            width="960"
+            height="400"
             style={{ border: 0 }}
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            className="grayscale w-full h-[350px]"
+            className="grayscale w-full h-[320px]"
           />
         </div>
       </div>
@@ -189,7 +267,7 @@ export default function CarbonBNUVisualizer() {
 
     <div className="grid md:grid-cols-3 gap-12">
       {/* Scope 1 */}
-      <div className="flex flex-col items-center justify-center bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all">
+      <div className="flex flex-col items-center justify-center bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all border-2 border-[#155631]">
         <RadialBarChart
           width={200}
           height={200}
@@ -219,12 +297,12 @@ export default function CarbonBNUVisualizer() {
           {totalScope1Emissions.toLocaleString()} kg CO₂
         </p>
         <p className="text-sm text-gray-500 mt-1">
-          Diesel Generators (Jan-Jun 2025)
+          Diesel Generators (Jan-Nov 2025)
         </p>
       </div>
 
       {/* Scope 2 */}
-      <div className="flex flex-col items-center justify-center bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all">
+      <div className="flex flex-col items-center justify-center bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all border-2 border-[#155631]">
         <RadialBarChart
           width={200}
           height={200}
@@ -257,7 +335,7 @@ export default function CarbonBNUVisualizer() {
       </div>
 
       {/* Scope 3 */}
-      <div className="flex flex-col items-center justify-center bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all">
+      <div className="flex flex-col items-center justify-center bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all border-2 border-[#155631]">
         <RadialBarChart
           width={200}
           height={200}
@@ -287,6 +365,15 @@ export default function CarbonBNUVisualizer() {
           {totalScope3Emissions.toLocaleString()} kg CO₂e
         </p>
         <p className="text-sm text-gray-500 mt-1">Waste Emissions</p>
+      </div>
+    </div>
+    
+    {/* December Data Note */}
+    <div className="mt-12 text-center">
+      <div className="inline-block bg-blue-50 border-2 border-blue-200 rounded-lg px-6 py-3">
+        <p className="text-sm text-blue-800 font-medium">
+          <strong>Note:</strong> December 2025 data will be added at the end of the month
+        </p>
       </div>
     </div>
   </div>
