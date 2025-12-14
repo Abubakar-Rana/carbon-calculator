@@ -105,7 +105,7 @@ export function AuthModal({ open, onOpenChange, onAuthenticated }: AuthModalProp
             )}
           </Button>
           <div className="text-xs text-gray-500 text-center mt-4 pt-4 border-t">
-            For support, contact: <strong>admin@carbonbnu.edu</strong>
+            For Access and Support, contact: <strong>muhammad.abubakar@bnu.edu.pk</strong>
           </div>
         </form>
       </DialogContent>
