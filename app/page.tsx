@@ -372,7 +372,7 @@ export default function CarbonBNUVisualizer() {
     <div className="mt-12 text-center">
       <div className="inline-block bg-blue-50 border-2 border-blue-200 rounded-lg px-6 py-3">
         <p className="text-sm text-blue-800 font-medium">
-          <strong>Note:</strong> December 2025 data will be added at the end of the month
+          <strong>Note:</strong> December 2025 data will be available at the end of the month
         </p>
       </div>
     </div>
